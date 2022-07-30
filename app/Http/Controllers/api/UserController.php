@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\SaveUserRequest;
 
 class UserController extends Controller
 {
@@ -24,9 +25,25 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveUserRequest $request)
     {
-        //
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            return response()->json([
+                'ok' => false,
+                'msg' => 'Ya existe un usuario con ese email'
+            ], 400);
+        }
+        
+        User::create($request->all());
+        return response()->json([
+            'ok' => true,
+            // 'uid' => $user->id,
+            // 'name' => $user->name,
+            // 'email' => $user->email,
+            // 'token' => 'token'
+            'msg' => 'User saved successfully'
+        ], 201);
     }
 
     /**
@@ -61,5 +78,16 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function login()
+    {
+        //$user 
+        return 'hi from login';
+    }
+
+    public function revalidateToken()
+    {
+        return 'hi from revalidateToken';
     }
 }

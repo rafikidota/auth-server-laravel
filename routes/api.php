@@ -18,4 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::get('users',[UserController::class,'index']);
+Route::post('auth/new',[UserController::class,'store']);
+Route::post('auth',[UserController::class,'login']);
+Route::get('auth/renew',[UserController::class,'revalidateToken']);
